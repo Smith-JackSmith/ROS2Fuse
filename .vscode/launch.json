@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "ROS: launch",
+            "type": "ros",
+            "request": "launch",
+            "target": "${file}",
+            "arguments": [
+                "robot_ip:=192.168.1.13"
+            ],
+            "env": {
+                "ROS_DOMAIN_ID": "11",
+                "ROS_PYTHON_VERSION": "3",
+                "ROS_LOCALHOST_ONLY": "0",
+                "QT_X11_NO_MITSHM": "1"
+            }
+        }
+    ],
+    "version": "2.0.0"
+}

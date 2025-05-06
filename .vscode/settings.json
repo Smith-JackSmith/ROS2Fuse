@@ -1,0 +1,22 @@
+{
+    "C_Cpp.errorSquiggles": "enabled",
+    "[cmake]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "cheshirekow.cmake-format",
+        "editor.formatOnPaste": false,
+        "editor.formatOnSaveMode": "file"
+    },
+    "[cpp]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "xaver.clang-format",
+        "editor.formatOnPaste": false,
+        "editor.formatOnSaveMode": "file"
+    },
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnPaste": false,
+        "editor.formatOnSaveMode": "file"
+    },
+    "cmake.sourceDirectory": "/home/jack/dev/Smit-tay/TopicFS/topic_fs"
+}

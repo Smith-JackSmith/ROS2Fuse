@@ -1,0 +1,37 @@
+{
+    "name": "topicfs Development Container",
+    "privileged": true,
+    "remoteUser": "${localEnv:USER}",
+    "dockerComposeFile": "../docker-compose.yml",
+    "service": "topicfs",
+    "workspaceFolder": "/topicfs",
+    "initializeCommand": "echo -e \"UID=$(id -u)\nGID=$(id -g)\nUSERNAME=$(whoami)\" > .env",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-vscode.cpptools",
+                "xaver.clang-format",
+                "twxs.cmake",
+                "ms-iot.vscode-ros"
+            ],
+            "settings": {
+                "python.analysis.extraPaths": [
+                    "/opt/ros/jazzy/lib/python3.12/site-packages",
+                    "/opt/ros/jazzy/local/lib/python3.12/dist-packages"
+                ],
+                "python.autoComplete.extraPaths": [
+                    "/opt/ros/jazzy/lib/python3.12/site-packages",
+                    "/opt/ros/jazzy/local/lib/python3.12/dist-packages"
+                ],
+                "terminal.integrated.defaultProfile.linux": "bash",
+                "terminal.integrated.profiles.linux": {
+                    "bash": {
+                        "path": "/bin/bash"
+                    }
+                }
+            }
+        }
+    }
+}

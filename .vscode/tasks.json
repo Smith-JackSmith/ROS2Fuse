@@ -1,0 +1,37 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "colcon",
+			"args": [
+				"build",
+				"--symlink-install",
+				"--event-handlers",
+				"console_cohesion+",
+				"--base-paths",
+				"/workspace",
+				"--cmake-args",
+				"-DCMAKE_BUILD_TYPE=Debug",
+				"-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+			],
+			"problemMatcher": [
+				"$catkin-gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"label": "colcon build"
+		},
+		{
+			"type": "shell",
+			"command": "rm -rf build install log",
+			"label": "cleanup",
+			"group": {
+				"kind": "none",
+				"isDefault": false
+			},
+			"problemMatcher": []
+		}
+	]
+}
