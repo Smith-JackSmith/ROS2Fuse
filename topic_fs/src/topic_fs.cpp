@@ -18,19 +18,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include <errno.h>
+#define FUSE_USE_VERSION 29  // TODO(Jack): Update this to the latest FUSE version
+#include <fuse.h>
 #include <string>
 #include <map>
 #include <vector>
 #include <mutex>
 #include <cstring>
-#include <errno.h>
 #include <unordered_map>
 
 #include <rclcpp/rclcpp.hpp>
 #include <nlohmann/json.hpp>
-
-#define FUSE_USE_VERSION 29  // we'll have to update this to 31 for the latest FUSE version
-#include <fuse.h>
 
 // ROS2 message type (example: std_msgs/String)
 #include <std_msgs/msg/string.hpp>
@@ -102,12 +101,11 @@ void discover_topics()
                     types.empty() ? "none" : types[0].c_str());
         if (!types.empty() && types[0] == "std_msgs/msg/String")
         {
-            topic_types_[topic] = types[0];     // Store type
-            subscribe_to_topic(topic);     // Subscribe only to std_msgs/String topics
+            topic_types_[topic] = types[0];         // Store type
+            subscribe_to_topic(topic);         // Subscribe only to std_msgs/String topics
         }
     }
 }
-
 };
 
 // Global ROS2 node
@@ -128,7 +126,8 @@ static int topicfs_getattr(const char* path, struct stat* stbuf)
 
     // Check if path is a topic (directory)
     auto topics = ros2_node->get_topics();
-    std::string topic_name = spath.substr(1); // Remove leading '/'
+    std::string topic_name = spath.substr(1);  // Remove leading '/'
+
     if (std::find(topics.begin(), topics.end(), topic_name) != topics.end())
     {
         stbuf->st_mode = S_IFDIR | 0755;
@@ -152,10 +151,9 @@ static int topicfs_getattr(const char* path, struct stat* stbuf)
                 if (file == "latest" && ros2_node->latest_messages.count("/" + topic))
                 {
                     stbuf->st_size = ros2_node->latest_messages["/" + topic].size();
-                }
-                else if (file == "info")
+                } else if (file == "info")
                 {
-                    stbuf->st_size = topic.size() + 10; // Approximate size
+                    stbuf->st_size = topic.size() + 10;  // Approximate size
                 }
                 return 0;
             }
@@ -169,17 +167,17 @@ static int topicfs_readdir(
     const char* path, void* buf, fuse_fill_dir_t filler,
     off_t offset, struct fuse_file_info* fi)
 {
-    (void) fi; // Suppress unused parameter warning
-    (void) offset; // Suppress unused parameter warning
+    (void) fi;          // Suppress unused parameter warning
+    (void) offset;      // Suppress unused parameter warning
 
     if (!ros2_node)
     {
         std::cerr << "Error: ros2_node is null in readdir" << std::endl;
-        return -EIO; // Input/output error
+        return -EIO;    // Input/output error
     }
 
     std::string spath(path);
-    std::cerr << "readdir: path=" << spath << std::endl; // Debug log
+    std::cerr << "readdir: path=" << spath << std::endl;    // Debug log
 
     if (spath == "/")
     {
@@ -220,7 +218,7 @@ static int topicfs_readdir(
 
 static int topicfs_open(const char* path, struct fuse_file_info* fi)
 {
-    (void) fi; // Suppress unused parameter warning
+    (void) fi;      // Suppress unused parameter warning
 
     std::string spath(path);
     size_t pos = spath.find('/', 1);
@@ -245,11 +243,11 @@ static int topicfs_read(
     const char* path, char* buf, size_t size, off_t offset,
     struct fuse_file_info* fi)
 {
-    (void) fi; // Suppress unused parameter warning
+    (void) fi;          // Suppress unused parameter warning
 
     if (offset < 0)
     {
-        return -EINVAL; // Invalid argument if offset is negative
+        return -EINVAL;     // Invalid argument if offset is negative
     }
     std::string spath(path);
     size_t pos = spath.find('/', 1);
@@ -272,8 +270,7 @@ static int topicfs_read(
         size_t len = std::min(size, data.size() - static_cast<std::string::size_type>(offset));
         memcpy(buf, data.c_str() + offset, len);
         return len;
-    }
-    else if (file == "info")
+    } else if (file == "info")
     {
         std::string info = "Topic: " + topic + "\nType: std_msgs/String\n";
         if (static_cast<std::string::size_type>(offset) >= info.size())
@@ -291,8 +288,8 @@ static int topicfs_read(
 // Function to collect directory entries for listing
 static int collect_entries(void* buf, const char* name, const struct stat* stbuf, off_t off)
 {
-    (void) stbuf; // Unused
-    (void) off;   // Unused
+    (void) stbuf;       // Unused
+    (void) off;         // Unused
     std::vector<std::string>* entries = static_cast<std::vector<std::string>*>(buf);
     entries->push_back(name);
     return 0;
@@ -314,26 +311,24 @@ void list_fuse_filesystem(rclcpp::Logger logger)
             {
                 RCLCPP_INFO(logger, "  /%s", entry.c_str());
                 // List contents of each topic directory
-                std::string topic_path = "/" + entry;
-                std::vector<std::string> topic_entries;
-                if (topicfs_readdir(topic_path.c_str(), &topic_entries, collect_entries, 0, nullptr) == 0)
+                std::string t_path = "/" + entry;  // apologies for the variable name, blame LINT
+                std::vector<std::string> t_entries;  // blame LINT
+                if( 0 == topicfs_readdir(t_path.c_str(), &t_entries, collect_entries, 0, nullptr)  )
                 {
-                    for (const auto& topic_entry : topic_entries)
+                    for (const auto& topic_entry : t_entries)
                     {
                         if (topic_entry != "." && topic_entry != "..")
                         {
                             RCLCPP_INFO(logger, "    /%s/%s", entry.c_str(), topic_entry.c_str());
                         }
                     }
-                }
-                else
+                } else
                 {
-                    RCLCPP_ERROR(logger, "Failed to read topic directory: %s", topic_path.c_str());
+                    RCLCPP_ERROR(logger, "Failed to read topic directory: %s", t_path.c_str());
                 }
             }
         }
-    }
-    else
+    } else
     {
         RCLCPP_ERROR(logger, "Failed to read root directory");
     }

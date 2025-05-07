@@ -62,9 +62,13 @@ install(TARGETS topic_fs
 # Testing
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
-  # Skip cpplint if not in a Git repo (remove when in a Git repo)
-  set(ament_cmake_cpplint_FOUND TRUE)
-  set(AMENT_LINT_AUTO_UNCRUSTIFY_CONFIG_FILE ${CMAKE_CURRENT_SOURCE_DIR}/uncrustify.cfg)
+  find_package(ament_cmake_uncrustify REQUIRED)
+  set(AMENT_LINT_AUTO_EXCLUDE ament_cmake_uncrustify)
+  set(AMENT_LINT_AUTO_CPPLINT_FILTERS "--filter=-whitespace/newline,-readability/braces")
+  ament_uncrustify(
+    TESTNAME uncrustify
+    CONFIG_FILE ${CMAKE_CURRENT_SOURCE_DIR}/uncrustify.cfg
+  )
   ament_lint_auto_find_test_dependencies()
 endif()
 
