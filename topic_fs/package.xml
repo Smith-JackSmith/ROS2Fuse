@@ -1,19 +1,24 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
-<!-- Copyright (c) 2025 Jack Sidman Smith -->
-<!-- Licensed under the MIT License. See LICENSE file in the project root for full license information. -->
 <package format="3">
+  <!-- Copyright (c) 2025 Jack Sidman Smith -->
+  <!-- Licensed under the MIT License. See LICENSE file in the project root for full license information. -->
   <name>topic_fs</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="smith.jack.sidman@gmail.com">jack</maintainer>
+  <description>ROS 2 utility for mounting topic data as a FUSE filesystem</description>
+  <maintainer email="smith.jack.sidman@gmail.com">Jack Sidman Smith</maintainer>
   <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
+  <!-- ROS 2 dependencies -->
   <depend>rclcpp</depend>
   <depend>std_msgs</depend>
-  <depend>nlohmann-json-dev</depend>
+
+  <!-- System dependencies -->
+  <build_depend>libfuse-dev</build_depend>
+  <exec_depend>fuse</exec_depend>
+  <build_depend>nlohmann-json-dev</build_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

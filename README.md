@@ -21,7 +21,13 @@ Currently, TopicFS supports `std_msgs/String` topics, with plans to extend to ot
   - `ros-jazzy-demo-nodes-cpp` (for the chatter example)
 
 ## Installation
-TopicFS is designed to run in a Docker container to ensure a consistent environment. Follow these steps to set up the project.
+TopicFS is designed to run in a Docker container to ensure a consistent environment.<br>
+If run outside a container, you may need to install the following packages:
+  - fuse
+  - libfuse-dev
+  - nlohmann-json3-dev
+
+Follow these steps to set up the project.
 
 ### 1. Clone the Repository
 ```bash
@@ -128,7 +134,8 @@ Example:
 ```
 
 ## Quality Assurance
-- **Code Style**: Follows ROS2 C++ style guidelines, enforced with `ament_cmake_clang_format`.
+- **Code Style**: Follows (modified) Stroustrup C++ style guidelines,<br>
+                  enforced with `ament_cmake_clang_format`.  (see `uncrustify.cfg`)
 - **Linting**: Uses `ament_lint_auto` and `ament_lint_common` for static analysis.
 - **Testing**: Planned for future releases (e.g., `ament_cmake_gtest` for unit tests).
 - **Build System**: Uses `ament_cmake` for ROS2 integration.
