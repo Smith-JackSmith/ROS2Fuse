@@ -9,7 +9,7 @@ The primary goal of TopicFS is to offer a novel way to access ROS2 topic data, m
 - Integrate ROS2 data with scripts or tools that expect file-based interfaces.
 - Debug ROS2 applications by browsing topics as files.
 
-Currently, TopicFS supports `std_msgs/String` topics, with plans to extend to other message types in future releases.
+Currently, TopicFS supports any topic type, although is still under development, so may be unstable.
 
 ## Prerequisites
 - **Operating System**: Ubuntu 24.04 (Noble)
