@@ -16,7 +16,10 @@ endif()
 # Find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(rosbag2_cpp REQUIRED)
+find_package(rosidl_runtime_cpp REQUIRED)
 find_package(std_msgs REQUIRED)
+
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(FUSE REQUIRED fuse) # Use 'fuse3' if using FUSE 3.x
 
@@ -45,7 +48,10 @@ target_compile_options(topic_fs PRIVATE ${FUSE_CFLAGS_OTHER})
 
 # ROS 2 dependencies (handles includes and linking)
 ament_target_dependencies(topic_fs
-  rclcpp
+  nlohmann_json
+  rclcpp  
+  rosbag2_cpp
+  rosidl_runtime_cpp  
   std_msgs
 )
 
