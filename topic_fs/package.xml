@@ -12,20 +12,22 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <!-- ROS 2 dependencies -->
+  <depend>geometry_msgs</depend>
   <depend>rclcpp</depend>
   <depend>rosbag2_cpp</depend>
   <depend>rosidl_runtime_cpp</depend>
   <depend>std_msgs</depend>
   
   <!-- System dependencies -->
-  <build_depend>libfuse-dev</build_depend>
+  <!-- <build_depend>libfuse-dev</build_depend> -->
   <build_depend>nlohmann-json-dev</build_depend>
 
   <exec_depend>fuse</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
-
+  <test_depend>turtlesim</test_depend>
+  
   <export>
     <build_type>ament_cmake</build_type>
   </export>

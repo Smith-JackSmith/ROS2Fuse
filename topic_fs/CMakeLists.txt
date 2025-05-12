@@ -15,6 +15,7 @@ endif()
 
 # Find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(geometry_msgs REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rosbag2_cpp REQUIRED)
 find_package(rosidl_runtime_cpp REQUIRED)
@@ -30,10 +31,15 @@ if(NOT nlohmann_json_FOUND)
 endif()
 
 # Add executable
-add_executable(topic_fs src/topic_fs.cpp)
+add_executable(topic_fs
+  src/main.cpp
+  src/topicfs_node.cpp
+  src/topicfs_fuse.cpp
+)
 
 # Include directories for FUSE and nlohmann_json
 target_include_directories(topic_fs PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${FUSE_INCLUDE_DIRS}
   /usr/include/nlohmann # Adjust if nlohmann_json is installed elsewhere
 )
@@ -46,8 +52,22 @@ target_link_libraries(topic_fs
 # Specify FUSE compiler flags
 target_compile_options(topic_fs PRIVATE ${FUSE_CFLAGS_OTHER})
 
+
+install(TARGETS
+  topic_fs
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+install(DIRECTORY
+  src/
+  DESTINATION include/${PROJECT_NAME}
+  FILES_MATCHING PATTERN "*.hpp"
+)
+
+
 # ROS 2 dependencies (handles includes and linking)
 ament_target_dependencies(topic_fs
+  geometry_msgs
   nlohmann_json
   rclcpp  
   rosbag2_cpp
